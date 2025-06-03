@@ -23,14 +23,15 @@ export default {
   methods: {
     async login() {
       try {
-        const res = await axios.post('http://localhost:5000/api/auth/login', {
+        // Use backend URL from env variable
+        const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
           email: this.email,
           password: this.password
         })
         localStorage.setItem('token', res.data.token)
         this.$router.push('/dashboard')
       } catch (err) {
-        alert('Login failed: ' + err.response?.data?.message)
+        alert('Login failed: ' + (err.response?.data?.message || err.message))
       }
     }
   }

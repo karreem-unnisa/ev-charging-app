@@ -33,7 +33,7 @@ export default {
   methods: {
     async fetchChargers() {
       try {
-        const res = await axios.get('http://localhost:5000/api/chargers', {
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/chargers`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -49,5 +49,3 @@ export default {
   },
 };
 </script>
-
-    

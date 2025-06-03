@@ -27,8 +27,8 @@
         <div v-if="editIndex === index">
           <!-- Edit Mode -->
           <input v-model="editForm.name" />
-  <input v-model.number="editForm.location.latitude" type="number" step="0.0001" />
-<input v-model.number="editForm.location.longitude" type="number" step="0.0001" />
+          <input v-model.number="editForm.location.latitude" type="number" step="0.0001" />
+          <input v-model.number="editForm.location.longitude" type="number" step="0.0001" />
 
           <select v-model="editForm.status">
             <option value="Active">Active</option>
@@ -69,7 +69,8 @@ export default {
         connectorType: ''
       },
       editIndex: null,
-      editForm: {}
+      editForm: {},
+      apiBaseUrl: import.meta.env.VITE_API_BASE_URL // <-- your backend URL here
     }
   },
   computed: {
@@ -84,7 +85,7 @@ export default {
   methods: {
     editCharger(index, charger) {
       this.editIndex = index
-      this.editForm = JSON.parse(JSON.stringify(charger)) // deep copy
+      this.editForm = JSON.parse(JSON.stringify(charger)) // deep copy to avoid binding issues
     },
     cancelEdit() {
       this.editIndex = null
@@ -92,22 +93,26 @@ export default {
     },
     async saveEdit(id) {
       try {
-        await axios.put(`http://localhost:5000/api/chargers/${id}`, this.editForm, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
+        await axios.put(
+          `${this.apiBaseUrl}/api/chargers/${id}`,
+          this.editForm,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
           }
-        })
+        )
         alert('Charger updated!')
         this.cancelEdit()
-        this.$emit('charger-deleted') // triggers re-fetch
+        this.$emit('charger-deleted') // triggers re-fetch of chargers
       } catch (err) {
-        alert('Update failed: ' + err.response?.data?.message || err.message)
+        alert('Update failed: ' + (err.response?.data?.message || err.message))
       }
     },
     async deleteCharger(id) {
       if (!confirm('Delete this charger?')) return
       try {
-        await axios.delete(`http://localhost:5000/api/chargers/${id}`, {
+        await axios.delete(`${this.apiBaseUrl}/api/chargers/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -121,8 +126,7 @@ export default {
 }
 </script>
 
-/* ChargerList.vue styles */
-
+<style scoped>
 h2 {
   font-size: 24px;
   color: #2c3e50;
@@ -192,3 +196,4 @@ hr {
   border-top: 1px solid #eee;
   margin-top: 10px;
 }
+</style>

@@ -23,14 +23,14 @@ export default {
   methods: {
     async register() {
       try {
-        await axios.post('http://localhost:5000/api/auth/register', {
+        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/register`, {
           email: this.email,
           password: this.password
         })
         alert('Registration successful! Now login.')
         this.$router.push('/login')
       } catch (err) {
-        alert('Registration failed: ' + err.response?.data?.message)
+        alert('Registration failed: ' + (err.response?.data?.message || err.message))
       }
     }
   }
