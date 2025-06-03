@@ -5,8 +5,13 @@
       <button class="logout-btn" @click="logout">Logout</button>
     </div>
 
-    <!-- Charger Form -->
-    <ChargerForm @charger-added="fetchChargers" />
+    <!-- Add Charger Button -->
+    <button class="add-btn" @click="showForm = !showForm">
+      {{ showForm ? 'Cancel' : '➕ Add Charger' }}
+    </button>
+
+    <!-- Charger Form (conditionally shown) -->
+    <ChargerForm v-if="showForm" @charger-added="handleAdded" />
 
     <!-- Charger List -->
     <ChargerList :chargers="chargers" @charger-deleted="fetchChargers" />
@@ -31,6 +36,7 @@ export default {
   data() {
     return {
       chargers: [],
+      showForm: false,
     };
   },
   methods: {
@@ -46,9 +52,13 @@ export default {
         alert('Could not load chargers.');
       }
     },
+    handleAdded() {
+      this.fetchChargers();
+      this.showForm = false; // Auto-close form after successful add
+    },
     logout() {
-      localStorage.removeItem('token')
-      this.$router.push('/login')
+      localStorage.removeItem('token');
+      this.$router.push('/login');
     },
   },
   mounted() {
@@ -92,6 +102,23 @@ export default {
   background-color: #c0392b;
 }
 
+.add-btn {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #218838;
+}
+
 /* Responsive tweak */
 @media (max-width: 768px) {
   .dashboard-container {
@@ -102,7 +129,8 @@ export default {
     font-size: 1.5rem;
   }
 
-  .logout-btn {
+  .logout-btn,
+  .add-btn {
     font-size: 0.9rem;
     padding: 0.4rem 0.8rem;
   }

@@ -8,7 +8,7 @@ const {
   deleteCharger
 } = require('../controllers/chargerController');
 
-router.use(auth); // protect all routes below
+router.use(auth); 
 
 router.post('/', createCharger);
 router.get('/', getAllChargers);
