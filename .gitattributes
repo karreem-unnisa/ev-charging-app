@@ -1,7 +1,0 @@
-# Set default behavior for all files
-* text=auto
-
-# Explicitly set line endings for certain file types (optional)
-*.js text
-*.json text
-*.md text
