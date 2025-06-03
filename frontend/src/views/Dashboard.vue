@@ -1,10 +1,13 @@
 <template>
-  <div>
-    <h1>Dashboard</h1>
-    
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Dashboard</h1>
+      <button class="logout-btn" @click="logout">Logout</button>
+    </div>
+
     <!-- Charger Form -->
     <ChargerForm @charger-added="fetchChargers" />
-    
+
     <!-- Charger List -->
     <ChargerList :chargers="chargers" @charger-deleted="fetchChargers" />
 
@@ -43,9 +46,65 @@ export default {
         alert('Could not load chargers.');
       }
     },
+    logout() {
+      localStorage.removeItem('token')
+      this.$router.push('/login')
+    },
   },
   mounted() {
     this.fetchChargers();
   },
 };
 </script>
+
+<style scoped>
+.dashboard-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  color: #2c3e50;
+}
+
+.logout-btn {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive tweak */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  .dashboard-title {
+    font-size: 1.5rem;
+  }
+
+  .logout-btn {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+</style>

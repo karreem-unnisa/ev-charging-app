@@ -6,11 +6,22 @@
 <script>
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png'
+import iconUrl from 'leaflet/dist/images/marker-icon.png'
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png'
 
 export default {
   name: 'ChargerMap',
   props: ['chargers'],
   mounted() {
+    // Fix icon path
+    delete L.Icon.Default.prototype._getIconUrl
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl,
+      iconUrl,
+      shadowUrl,
+    })
+
     const map = L.map('map').setView([12.9716, 77.5946], 13)
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -30,4 +41,5 @@ export default {
     })
   }
 }
+
 </script>
